@@ -2,27 +2,24 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <!-- 모바일 및 태블릿 화면 비율 고정, 확대 방지 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>진드기 예방 운세 뽑기</title>
     
     <style>
-        /* 외부 폰트 없이 태블릿 기본 고딕체 사용 (오프라인 완벽 대응) */
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; /* 외부 폰트 없이 기기 기본 폰트 사용 */
             background-color: #f3f4f6;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden; /* 스크롤 완전 방지 */
-            user-select: none; /* 텍스트 선택 방지 */
+            overflow: hidden; 
+            user-select: none;
             -webkit-user-select: none;
         }
 
-        /* 전체 레이아웃 틀 (가로형에 맞게 가로폭 최대 활용) */
         #app {
             width: 100%;
             max-width: 95vw; 
@@ -36,7 +33,7 @@
             overflow: hidden; 
         }
 
-        /* 상단 네비게이션 버튼들 */
+        /* 공통 상단 네비게이션 버튼 */
         .home-btn {
             position: absolute;
             top: 10px;
@@ -69,7 +66,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* 각 화면 공통 스타일 */
         .screen {
             flex: 1;
             display: flex;
@@ -77,18 +73,16 @@
             justify-content: center;
             align-items: center;
             height: 100%;
-            min-height: min-content;
-            padding: 1vh 0;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        /* 화면 숨기기 용도 */
         .hidden {
             display: none !important;
         }
 
-        /* 텍스트 크기 (vh를 적극 활용하여 가로 화면에서 세로 넘침 방지) */
         .title {
-            font-size: clamp(2.5rem, 7vh, 4.5rem);
+            font-size: clamp(3rem, 7vh, 5rem);
             font-weight: bold;
             color: #b91c1c;
             margin-bottom: clamp(1rem, 2vh, 2rem);
@@ -97,13 +91,13 @@
         }
         
         .subtitle {
-            font-size: clamp(1.2rem, 3.5vh, 2.2rem);
+            font-size: clamp(1.5rem, 4vh, 2.5rem);
             color: #374151;
             margin-bottom: clamp(1.5rem, 4vh, 3rem);
             font-weight: bold;
         }
 
-        /* 버튼 기본 스타일 */
+        /* 공통 버튼 스타일 */
         .btn {
             border: none;
             border-radius: 9999px;
@@ -126,25 +120,23 @@
 
         .btn-next {
             background-color: #2563eb;
-            font-size: clamp(1.5rem, 4vh, 2.5rem);
+            font-size: clamp(1.8rem, 4.5vh, 2.8rem);
             padding: clamp(1rem, 2vh, 1.5rem) clamp(2rem, 4vh, 4rem);
             margin-top: clamp(1rem, 2vh, 2rem);
         }
 
-        /* 달력(생년월일) 입력 UI 스타일 */
         .date-display {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin-bottom: clamp(1rem, 2vh, 2rem);
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px; /* 가로 공간 넓게 활용 */
         }
         
         .date-part {
             flex: 1;
-            /* 상단 년/월/일 탭 글씨 크기 대폭 확대 */
-            font-size: clamp(1.5rem, 4vh, 2.5rem);
+            font-size: clamp(1.8rem, 4.5vh, 3rem); /* 년/월/일 탭 글씨 크기 대폭 확대 */
             padding: clamp(10px, 2vh, 20px) 5px;
             background-color: #ffffff;
             border: 3px solid #e5e7eb;
@@ -167,6 +159,7 @@
             display: grid;
             gap: clamp(5px, 1vh, 10px);
             width: 100%;
+            max-width: 1200px;
             background: white;
             padding: clamp(10px, 2vh, 20px);
             border-radius: 20px;
@@ -175,35 +168,22 @@
             align-content: start;
         }
         
-        /* 년도 그리드 (12칸 배치) */
         .grid-years {
-            grid-template-columns: repeat(12, 1fr); 
-            max-height: 70vh; /* 잘리지 않도록 높이 제한을 여유 있게 늘림 */
-            overflow-y: auto; /* 만약을 대비해 넘치면 스크롤되도록 설정 */
-            -ms-overflow-style: none; /* 인터넷 익스플로러 스크롤바 숨김 */
-            scrollbar-width: none; /* 파이어폭스 스크롤바 숨김 */
+            grid-template-columns: repeat(12, 1fr); /* 12칸 */
+            max-height: 60vh; /* 화면에 꽉 차게 */
+            overflow-y: auto; /* 혹시 넘치면 스크롤 가능하게 허용 */
+            -ms-overflow-style: none; 
+            scrollbar-width: none; 
         }
+        .grid-years::-webkit-scrollbar { display: none; }
         
-        /* 크롬, 사파리 스크롤바 숨김 (깔끔한 화면 유지) */
-        .grid-years::-webkit-scrollbar {
-            display: none;
-        }
-        
-        /* 월 그리드 (6칸 2줄) */
-        .grid-months {
-            grid-template-columns: repeat(6, 1fr); 
-        }
-        
-        /* 일 그리드 (7칸 5줄) */
-        .grid-days {
-            grid-template-columns: repeat(7, 1fr); 
-        }
+        .grid-months { grid-template-columns: repeat(6, 1fr); }
+        .grid-days { grid-template-columns: repeat(7, 1fr); }
         
         .grid-btn {
             font-family: inherit;
-            /* 어르신들을 위해 달력 숫자 글씨 크기 대폭 확대 */
-            font-size: clamp(1.4rem, 4vh, 2.5rem);
-            padding: clamp(8px, 1.5vh, 15px) 0;
+            font-size: clamp(1.4rem, 3.5vh, 2.5rem); /* 달력 숫자 크기 대폭 확대 */
+            padding: clamp(10px, 1.8vh, 18px) 0;
             border: 2px solid #f3f4f6;
             border-radius: 10px;
             background-color: #f9fafb;
@@ -213,81 +193,63 @@
             transition: background-color 0.1s;
         }
         
-        .grid-btn:active {
-            background-color: #fee2e2;
-        }
-        
+        .grid-btn:active { background-color: #fee2e2; }
         .grid-btn.selected {
             background-color: #dc2626;
             color: white;
             border-color: #dc2626;
         }
 
-        /* 결과 박스 레이아웃 (좌우 나란히 배치) */
         .result-container {
             display: flex;
             flex-direction: row; 
             gap: 2vw;
             width: 100%;
             height: 65vh; 
-            margin-bottom: 2vh;
+            margin-bottom: 1vh;
         }
 
         .result-box {
             border-radius: 25px;
             padding: clamp(1rem, 3vh, 2.5rem);
             width: 100%;
-            flex: 1; /* 가로 공간을 반반씩 차지 */
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             box-sizing: border-box;
-            margin-bottom: 0;
         }
 
-        /* 운세 박스 (노란색) */
-        .fortune-box {
-            background-color: #ffffff;
-            border: 5px solid #eab308;
-        }
-
+        .fortune-box { background-color: #ffffff; border: 5px solid #eab308; }
         .fortune-title {
-            font-size: clamp(1.5rem, 4vh, 2.8rem);
+            font-size: clamp(1.8rem, 4.5vh, 3rem);
             color: #ca8a04;
             font-weight: bold;
             margin-bottom: clamp(0.5rem, 2vh, 1.5rem);
         }
-
         .fortune-text {
-            font-size: clamp(1.5rem, 5vh, 3.2rem);
+            font-size: clamp(1.8rem, 5vh, 3.2rem);
             font-weight: 900;
             color: #111827;
             line-height: 1.4;
             word-break: keep-all;
         }
 
-        /* 예방수칙 박스 (빨간색) */
-        .rule-box {
-            background-color: #fef2f2;
-            border: 5px solid #ef4444;
-        }
-
+        .rule-box { background-color: #fef2f2; border: 5px solid #ef4444; }
         .rule-text {
-            font-size: clamp(1.5rem, 4.5vh, 3rem);
+            font-size: clamp(1.8rem, 4.8vh, 3rem);
             font-weight: bold;
             color: #7f1d1d;
             line-height: 1.4;
             word-break: keep-all;
         }
 
-        /* 애니메이션 효과 */
         .float {
             animation: float 3s ease-in-out infinite;
-            font-size: clamp(6rem, 18vh, 12rem);
-            margin: 2vh 0;
+            font-size: clamp(6rem, 15vh, 10rem);
+            margin: 1vh 0;
         }
-
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
@@ -299,7 +261,6 @@
             font-size: clamp(5rem, 15vh, 10rem);
             margin: 2vh 0;
         }
-
         @keyframes shake {
             10%, 90% { transform: translate3d(-2px, 0, 0) rotate(-5deg); }
             20%, 80% { transform: translate3d(4px, 0, 0) rotate(5deg); }
@@ -311,31 +272,271 @@
             animation: fadeIn 0.8s ease-in forwards;
             opacity: 0;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .delay-1 { animation-delay: 0.5s; }
         .delay-2 { animation-delay: 1.5s; }
         
-        #btn-draw {
-            margin-top: 3vh;
-        }
+        #btn-draw { margin-top: 3vh; }
     </style>
 </head>
 <body>
     
     <div id="app">
-        <!-- 네비게이션 버튼 -->
+        <!-- 항상 표시되는 네비게이션 버튼 -->
         <button class="home-btn" onclick="resetScreen()">🏠 처음으로</button>
         <button class="fullscreen-btn" onclick="toggleFullScreen()">🖥️ 전체화면</button>
 
-        <!-- Screen 0: 시작 화면 (대문) -->
+        <!-- Screen 0: 대문(시작) 화면 -->
         <div id="screen-intro" class="screen">
             <div class="title" style="font-size: clamp(3rem, 9vh, 5.5rem); margin-bottom: 0;">진드기 예방</div>
             <div class="title" style="font-size: clamp(3.5rem, 11vh, 6.5rem); color: #111827;">건강 운세 뽑기</div>
             <div class="float">🧧</div>
-            <div class="subtitle">나의 생년월일로 알아보는<br>오늘의 건강 비결과 운세!</div>
-            <button class="btn btn-start" onclick="goToDateSelection()">
+            <div class="subtitle">나의 생년월일로 알아보는 오늘의 건강 비결과 운세!</div>
+            <button class="btn btn-start" onclick="goToDateSelection()">운세 보러가기 👉</button>
+        </div>
+
+        <!-- Screen 1: 생년월일 입력 화면 -->
+        <div id="screen-date" class="screen hidden">
+            <!-- 한 줄로 간결해진 안내 문구 -->
+            <div class="title">생년월일을 선택해 주세요!</div>
+            
+            <div class="date-display">
+                <div id="tab-year" class="date-part active" onclick="showDateTab('year')">년도 선택</div>
+                <div id="tab-month" class="date-part" onclick="showDateTab('month')">월 선택</div>
+                <div id="tab-day" class="date-part" onclick="showDateTab('day')">일 선택</div>
+            </div>
+
+            <div id="grid-year" class="date-grid grid-years"></div>
+            <div id="grid-month" class="date-grid grid-months hidden"></div>
+            <div id="grid-day" class="date-grid grid-days hidden"></div>
+
+            <button id="btn-draw" class="btn btn-start hidden" onclick="startDraw()">운세 뽑기 🎯</button>
+        </div>
+
+        <!-- Screen 2: 로딩 애니메이션 화면 -->
+        <div id="screen-loading" class="screen hidden">
+            <div class="title" style="color: #111827;">운세를 풀이하는 중...</div>
+            <div class="shake">🧧</div>
+            <div class="subtitle">좋은 기운을 듬뿍 담고 있습니다</div>
+        </div>
+
+        <!-- Screen 3: 결과 화면 -->
+        <div id="screen-result" class="screen hidden">
+            <div class="result-container">
+                <!-- 운세 섹션 -->
+                <div class="result-box fortune-box fade-in">
+                    <div id="fortune-grade" class="fortune-title">🍀 오늘의 운세 🍀</div>
+                    <div id="fortune-text" class="fortune-text"></div>
+                </div>
+
+                <!-- 예방수칙 섹션 -->
+                <div class="result-box rule-box fade-in delay-1">
+                    <div id="rule-text" class="rule-text"></div>
+                </div>
+            </div>
+            <button onclick="goToDateSelection()" class="btn btn-next fade-in delay-2">다음 사람 뽑기 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // 25종의 어르신 맞춤형 야외활동 운세 및 예방수칙 데이터
+        const fortunes = [
+            { text: "챙 넓은 모자를 쓰고 산책길에 나서면 머리가 맑아지고 큰 복이 들어옵니다!", secret: "💡 안전비결: 외출 시 챙 넓은 모자로 머리 보호" },
+            { text: "외출할 때 얇은 긴소매 옷을 걸치면 온갖 액운과 나쁜 기운이 범접하지 못합니다!", secret: "💡 안전비결: 야외활동 시 긴소매로 맨살 노출 방지" },
+            { text: "산에 오를 때 발목까지 덮는 긴바지를 입으시면 걸음마다 좋은 기운이 솟아납니다!", secret: "💡 안전비결: 풀숲에 갈 때는 반드시 긴바지 착용" },
+            { text: "팔에 토시를 덧대어 차면 재물이 새어나가지 않고 건강운이 쑥쑥 올라갑니다!", secret: "💡 안전비결: 팔목에 토시를 착용하여 빈틈 차단" },
+            { text: "맨발이 보이지 않게 편안한 운동화를 신으시면 걷는 길마다 귀인을 만나게 됩니다!", secret: "💡 안전비결: 슬리퍼 대신 틈이 없는 편안한 운동화 신기" },
+            { text: "바짓단을 양말 안으로 쏙 넣으시면 집안에 상서로운 기운이 차곡차곡 쌓입니다!", secret: "💡 안전비결: 바짓단을 양말 속에 넣어 진드기 침투 차단" },
+            { text: "산뜻하고 밝은색 옷을 입고 나들이를 가시면 온종일 행운이 따라다닙니다!", secret: "💡 안전비결: 진드기가 잘 보이는 밝은색 옷 입기" },
+            { text: "외출 전 옷가지에 기피제를 칙칙 뿌리면 나쁜 기운이 멀리 달아나고 만사형통합니다!", secret: "💡 안전비결: 외출 전 옷과 신발에 해충 기피제 뿌리기" },
+            { text: "풀숲을 헤치지 않고 사람들이 다니는 넓은 길로만 다니시면 평생토록 액운을 피합니다!", secret: "💡 안전비결: 지정된 산책로만 이용하고 풀숲 진입 금지" },
+            { text: "공원에서 쉴 때 돗자리를 넓게 펴고 앉으시면 피로가 가시고 복이 넝쿨째 굴러옵니다!", secret: "💡 안전비결: 풀밭 위에 그냥 앉지 말고 반드시 돗자리 사용" },
+            { text: "풀밭에 겉옷을 벗어두지 않고 잘 갈무리하시면 소중한 것을 잃지 않는 하루가 됩니다!", secret: "💡 안전비결: 야외에 옷을 벗어두거나 깔고 앉지 않기" },
+            { text: "집에 오기 전 가방과 모자를 툭툭 털어내면 밖에서 묻은 근심이 모두 털려 나갑니다!", secret: "💡 안전비결: 귀가 전 야외에서 사용한 물건들 꼼꼼히 털기" },
+            { text: "외출 후 집에 돌아와 곧바로 시원하게 샤워하시면 묵은 액운이 씻겨 나가 대통합니다!", secret: "💡 안전비결: 야외활동 후 귀가 즉시 목욕하기" },
+            { text: "씻을 때 몸 구석구석을 찬찬히 살피면 앞으로 닥칠 화를 미리 막고 평안해집니다!", secret: "💡 안전비결: 목욕 시 무릎 뒤, 겨드랑이 등에 진드기 확인" },
+            { text: "외출복을 다른 옷과 섞지 않고 훌훌 털어 바로 세탁기에 넣으시면 가정에 웃음꽃이 핍니다!", secret: "💡 안전비결: 야외활동 복장은 귀가 후 털어서 단독 세탁" },
+            { text: "놀란 마음에 맨손으로 섣불리 건드리지 않고 차분히 대처하시면 흉한 기운이 스며들지 않아 만수무강하십니다!", secret: "💡 안전비결: 진드기를 발견해도 당황하여 맨손으로 떼지 말고 꼭 병원 가기" },
+            { text: "몸이 으슬으슬할 때 참지 않고 의원을 찾으시면 작은 병이 큰 복으로 바뀝니다!", secret: "💡 안전비결: 야외활동 후 열이 나면 즉시 보건소나 병원 방문" },
+            { text: "한낮 뜨거운 볕을 피해 그늘에서 쉬어가시면 수명이 한 해 더 늘어나고 기력이 샘솟습니다!", secret: "💡 안전비결: 한여름 낮 시간대 야외활동 줄이고 충분한 휴식" },
+            { text: "시원한 물을 자주 들이켜시면 몸속 막힌 기운이 뻥 뚫리고 활력이 넘칩니다!", secret: "💡 안전비결: 나들이 중 갈증 나기 전 주기적인 수분 섭취" },
+            { text: "걷는 중간에 기지개를 켜고 허리를 펴시면 관절에 깃든 나쁜 기운이 싹 날아갑니다!", secret: "💡 안전비결: 걷기 운동 중 주기적으로 관절 스트레칭 하기" },
+            { text: "혼자 가지 않고 이웃과 정을 나누며 함께 산책하시면 뜻밖의 귀인을 만납니다!", secret: "💡 안전비결: 혹시 모를 안전사고 대비 2인 이상 함께 활동" },
+            { text: "강아지와 산책 후 털을 빗겨주며 잘 살피시면 집안 터줏대감이 흐뭇해하며 복을 내립니다!", secret: "💡 안전비결: 반려동물 산책 후 털 속에 진드기가 있는지 확인" },
+            { text: "으슥한 풀숲에 함부로 들어가지 않으시면 구설수에 오르지 않고 하루가 평안합니다!", secret: "💡 안전비결: 등산 중 풀밭이나 덤불에 들어가 용변 보지 않기" },
+            { text: "산바람이 불 때 소매와 목깃을 단정히 여미시면 재물과 건강을 동시에 지켜냅니다!", secret: "💡 안전비결: 소매 끝과 목 주변으로 벌레가 들어오지 않게 여미기" },
+            { text: "준비한 물건의 쓰임새를 한 번 더 확인하시면 오늘 하루 어떤 어려움도 무사히 비껴갑니다!", secret: "💡 안전비결: 기피제 사용 전 얼굴을 피하고 정해진 용법 지키기" }
+        ];
+
+        // 상태 변수
+        let fortuneBag = [];
+        let lastFortuneIndex = -1;
+        let selectedDate = { year: null, month: null, day: null };
+        let drawTimeout = null; // 중간 멈춤용 타이머
+
+        function getFortune() {
+            if (fortuneBag.length === 0) {
+                fortuneBag = fortunes.map((_, index) => index);
+                for (let i = fortuneBag.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [fortuneBag[i], fortuneBag[j]] = [fortuneBag[j], fortuneBag[i]];
+                }
+                if (fortuneBag[0] === lastFortuneIndex && fortuneBag.length > 1) {
+                    let temp = fortuneBag[0];
+                    fortuneBag[0] = fortuneBag[1];
+                    fortuneBag[1] = temp;
+                }
+            }
+            let pickedIndex = fortuneBag.shift();
+            lastFortuneIndex = pickedIndex;
+            return fortunes[pickedIndex];
+        }
+
+        function initDateGrids() {
+            const gridYear = document.getElementById('grid-year');
+            const gridMonth = document.getElementById('grid-month');
+            const gridDay = document.getElementById('grid-day');
+            
+            gridYear.innerHTML = ''; gridMonth.innerHTML = ''; gridDay.innerHTML = '';
+
+            // 년도: 1920 ~ 1995 (총 76개)
+            for (let y = 1920; y <= 1995; y++) {
+                let btn = document.createElement('button');
+                btn.className = 'grid-btn';
+                btn.innerText = y;
+                btn.onclick = () => selectDatePart('year', y, btn);
+                gridYear.appendChild(btn);
+            }
+            // 월: 1 ~ 12
+            for (let m = 1; m <= 12; m++) {
+                let btn = document.createElement('button');
+                btn.className = 'grid-btn';
+                btn.innerText = m + '월';
+                btn.onclick = () => selectDatePart('month', m, btn);
+                gridMonth.appendChild(btn);
+            }
+            // 일: 1 ~ 31
+            for (let d = 1; d <= 31; d++) {
+                let btn = document.createElement('button');
+                btn.className = 'grid-btn';
+                btn.innerText = d + '일';
+                btn.onclick = () => selectDatePart('day', d, btn);
+                gridDay.appendChild(btn);
+            }
+        }
+
+        function showDateTab(tabName) {
+            document.getElementById('grid-year').classList.add('hidden');
+            document.getElementById('grid-month').classList.add('hidden');
+            document.getElementById('grid-day').classList.add('hidden');
+            document.getElementById(`grid-${tabName}`).classList.remove('hidden');
+
+            document.getElementById('tab-year').classList.remove('active');
+            document.getElementById('tab-month').classList.remove('active');
+            document.getElementById('tab-day').classList.remove('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        function selectDatePart(part, value, btnElement) {
+            selectedDate[part] = value;
+            
+            let parent = btnElement.parentElement;
+            let buttons = parent.getElementsByClassName('grid-btn');
+            for (let btn of buttons) {
+                btn.classList.remove('selected');
+            }
+            btnElement.classList.add('selected');
+
+            let tabText = value;
+            if (part === 'month' || part === 'day') tabText += (part === 'month' ? '월' : '일');
+            document.getElementById(`tab-${part}`).innerText = tabText;
+
+            if (part === 'year') showDateTab('month');
+            else if (part === 'month') showDateTab('day');
+            else if (part === 'day') checkAllDateSelected();
+        }
+
+        function checkAllDateSelected() {
+            if (selectedDate.year && selectedDate.month && selectedDate.day) {
+                document.getElementById('btn-draw').classList.remove('hidden');
+            }
+        }
+
+        function showScreen(screenId) {
+            document.getElementById('screen-intro').classList.add('hidden');
+            document.getElementById('screen-date').classList.add('hidden');
+            document.getElementById('screen-loading').classList.add('hidden');
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function resetScreen() {
+            if (drawTimeout) clearTimeout(drawTimeout); // 애니메이션 도중 중지
+            
+            selectedDate = { year: null, month: null, day: null };
+            document.getElementById('tab-year').innerText = '년도 선택';
+            document.getElementById('tab-month').innerText = '월 선택';
+            document.getElementById('tab-day').innerText = '일 선택';
+            document.getElementById('btn-draw').classList.add('hidden');
+            
+            initDateGrids();
+            showDateTab('year');
+            showScreen('screen-intro'); // 대문 화면으로 이동
+        }
+
+        function goToDateSelection() {
+            showScreen('screen-date');
+        }
+
+        function startDraw() {
+            showScreen('screen-loading');
+            
+            drawTimeout = setTimeout(() => {
+                const result = getFortune();
+                // 1950년생 오늘의 운세 형태로 표시
+                document.getElementById('fortune-grade').innerText = `🍀 ${selectedDate.year}년생 오늘의 운세 🍀`;
+                document.getElementById('fortune-text').innerText = result.text;
+                document.getElementById('rule-text').innerText = result.secret;
+                
+                showScreen('screen-result');
+                
+                // 결과 화면의 애니메이션 재시작
+                const resultBoxes = document.querySelectorAll('.result-box, .btn-next');
+                resultBoxes.forEach(el => {
+                    el.style.animation = 'none';
+                    el.offsetHeight; 
+                    el.style.animation = null;
+                });
+            }, 2000);
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+                    document.documentElement.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        // 앱 시작 시 달력 초기화
+        window.onload = () => {
+            initDateGrids();
+        };
+    </script>
+</body>
+</html>
