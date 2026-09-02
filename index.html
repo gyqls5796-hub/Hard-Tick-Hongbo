@@ -177,8 +177,15 @@
         /* 년도 그리드 (12칸 배치) */
         .grid-years {
             grid-template-columns: repeat(12, 1fr); 
-            max-height: 55vh; 
-            overflow: hidden; 
+            max-height: 70vh; /* 잘리지 않도록 높이 제한을 여유 있게 늘림 */
+            overflow-y: auto; /* 만약을 대비해 넘치면 스크롤되도록 설정 */
+            -ms-overflow-style: none; /* 인터넷 익스플로러 스크롤바 숨김 */
+            scrollbar-width: none; /* 파이어폭스 스크롤바 숨김 */
+        }
+        
+        /* 크롬, 사파리 스크롤바 숨김 (깔끔한 화면 유지) */
+        .grid-years::-webkit-scrollbar {
+            display: none;
         }
         
         /* 월 그리드 (6칸 2줄) */
@@ -193,8 +200,9 @@
         
         .grid-btn {
             font-family: inherit;
-            font-size: clamp(1.1rem, 3vh, 2rem);
-            padding: clamp(6px, 1.5vh, 12px) 0;
+            /* 7줄이 화면에 다 들어오도록 글씨와 여백 크기를 아주 살짝만 줄임 */
+            font-size: clamp(1rem, 2.6vh, 1.8rem);
+            padding: clamp(4px, 1.2vh, 10px) 0;
             border: 2px solid #f3f4f6;
             border-radius: 10px;
             background-color: #f9fafb;
@@ -273,6 +281,18 @@
         }
 
         /* 애니메이션 효과 */
+        .float {
+            animation: float 3s ease-in-out infinite;
+            font-size: clamp(6rem, 18vh, 12rem);
+            margin: 2vh 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
         .shake {
             animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both infinite;
             font-size: clamp(5rem, 15vh, 10rem);
@@ -311,8 +331,19 @@
         <button class="home-btn" onclick="resetScreen()">🏠 처음으로</button>
         <button class="fullscreen-btn" onclick="toggleFullScreen()">🖥️ 전체화면</button>
 
+        <!-- Screen 0: 시작 화면 (대문) -->
+        <div id="screen-intro" class="screen">
+            <div class="title" style="font-size: clamp(3rem, 9vh, 5.5rem); margin-bottom: 0;">진드기 예방</div>
+            <div class="title" style="font-size: clamp(3.5rem, 11vh, 6.5rem); color: #111827;">건강 운세 뽑기</div>
+            <div class="float">🧧</div>
+            <div class="subtitle">나의 생년월일로 알아보는<br>오늘의 건강 비결과 운세!</div>
+            <button class="btn btn-start" onclick="goToDateSelection()">
+                시작하기 👆
+            </button>
+        </div>
+
         <!-- Screen 1: 정보 입력 (달력 UI) -->
-        <div id="screen-date" class="screen">
+        <div id="screen-date" class="screen hidden">
             <div class="title">어르신, 생년월일을<br>선택해 주세요!</div>
             
             <div class="date-display">
@@ -504,8 +535,17 @@
             }
         }
 
+        // 시작화면에서 달력화면으로 넘어가기
+        function goToDateSelection() {
+            openTab('year');
+            showScreen('screen-date');
+        }
+
         // 화면 전환 헬퍼 함수
         function showScreen(screenId) {
+            const intro = document.getElementById('screen-intro');
+            if(intro) intro.classList.add('hidden');
+
             document.getElementById('screen-date').classList.add('hidden');
             document.getElementById('screen-loading').classList.add('hidden');
             document.getElementById('screen-result').classList.add('hidden');
@@ -564,8 +604,7 @@
 
             document.getElementById('btn-draw').classList.add('hidden');
             
-            openTab('year');
-            showScreen('screen-date');
+            showScreen('screen-intro');
         }
 
         // 전체화면 토글 기능
@@ -584,6 +623,7 @@
         // 앱 시작 시 달력 생성
         window.onload = function() {
             initDateUI();
+            showScreen('screen-intro');
         }
     </script>
 </body>
