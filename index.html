@@ -347,7 +347,7 @@
                     <div id="rule-text" class="rule-text"></div>
                 </div>
             </div>
-            <button onclick="resetScreen()" class="btn btn-next fade-in delay-2">다음 사람 뽑기 🔄</button>
+            <button onclick="nextPerson()" class="btn btn-next fade-in delay-2">다음 사람 뽑기 🔄</button>
         </div>
     </div>
 
@@ -495,6 +495,21 @@
             initDateGrids();
             showDateTab('year');
             showScreen('screen-intro'); // 대문 화면으로 이동
+        }
+
+        function nextPerson() {
+            if (drawTimeout) clearTimeout(drawTimeout); // 애니메이션 도중 중지
+            
+            // 이전 사람의 데이터와 화면 상태를 완벽하게 초기화
+            selectedDate = { year: null, month: null, day: null };
+            document.getElementById('tab-year').innerText = '년도 선택';
+            document.getElementById('tab-month').innerText = '월 선택';
+            document.getElementById('tab-day').innerText = '일 선택';
+            document.getElementById('btn-draw').classList.add('hidden');
+            
+            initDateGrids();
+            showDateTab('year');
+            showScreen('screen-date'); // 달력 화면으로 바로 이동!
         }
 
         function goToDateSelection() {
